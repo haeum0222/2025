@@ -121,7 +121,7 @@ anime_art_mapping = {
         {
             "title": "절규",
             "artist": "에드바르 뭉크",
-            "image_path": os. 뛰os.path.join(ART_IMAGES_DIR, "scream.jpg"),
+            "image_path": os. os.path.join(ART_IMAGES_DIR, "scream.jpg"),
             "story": "다리 위에서 귀를 막고 비명을 지르는 듯한 인물의 모습과 뒤틀린 배경은 극심한 불안과 공포, 고독, 그리고 현대인의 실존적 위기를 표현합니다. 내면의 소용돌이치는 감정이 외적인 형태로 폭발하는 순간을 시각화했습니다.",
             "connection": "정신적인 압박감, 극한의 공포, 해결되지 않는 미스터리로 인한 긴장감, 그리고 인물의 불안정한 심리를 파고드는 스릴러/심리물 애니메이션과 깊이 연결됩니다. 예측 불가능한 상황과 비극적인 결말을 암시하기도 합니다."
         },
