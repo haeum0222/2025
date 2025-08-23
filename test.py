@@ -1,25 +1,107 @@
 import streamlit as st
 from PIL import Image
-import os # 이미지 경로를 위해
+import os
 
-# --- 1. 앱 기본 설정 (제목, 설명 등) ---
-st.set_page_config(layout="wide", page_title="애니X명화 스토리 매칭 시스템")
+# --- 0. Streamlit 앱 기본 설정 ---
+# 레이아웃을 넓게 해서 이미지를 시원하게 보여주자!
+st.set_page_config(
+    layout="wide",
+    page_title="🎨 애니X명화: 스토리 연결고리 탐색 📚",
+    initial_sidebar_state="expanded" # 사이드바를 시작부터 열어줘
+)
 
-st.title("🎨 애니메이션/만화 X 서양 명화: 스토리 연결고리 탐색 📚")
-st.markdown("""
-좋아하는 애니메이션/만화의 장르나 테마를 선택해주세요!
-당신의 취향과 놀랍도록 닮은 서양 미술 작품과 그 스토리를 알려드릴게요.
-""")
+# ✨ 앱 꾸미기 (CSS 스타일링) ✨
+st.markdown(
+    """
+    <style>
+    /* 전체 페이지 배경색 */
+    .stApp {
+        background-color: #f0f2f6; /* 밝은 회색 계열 */
+        font-family: 'AppleSDGothicNeo', 'Malgun Gothic', sans-serif; /* 예쁜 한글 폰트 적용 (시스템 폰트) */
+    }
 
-# --- 2. 명화 이미지 폴더 설정 (예시) ---
-# 실제 이미지를 'art_images' 폴더 안에 넣어두세요.
-# 예를 들어, art_images/judith.jpg, art_images/perseus.jpg
+    /* 메인 콘텐츠 영역 안쪽 여백 */
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
+
+    /* 사이드바 배경색 */
+    .css-1d391kg { /* Streamlit의 사이드바 CSS 클래스 */
+        background-color: #e0e0e0;
+    }
+
+    /* 제목 스타일 */
+    h1 {
+        color: #4B0082; /* 인디고 */
+        text-align: center;
+        font-size: 3em; /* 글자 크기 키우기 */
+        margin-bottom: 0.5em; /* 여백 추가 */
+    }
+    h2 {
+        color: #8A2BE2; /* 블루 바이올렛 */
+        font-size: 2em;
+    }
+    h3 {
+        color: #A020F0; /* 퍼플 */
+        font-size: 1.5em;
+    }
+
+    /* 일반 텍스트 스타일 */
+    .stMarkdown p {
+        font-size: 1.1em; /* 글자 크기 조금 키우기 */
+        line-height: 1.6; /* 줄 간격 넓히기 */
+        color: #333;
+    }
+
+    /* 버튼 스타일 */
+    .stButton>button {
+        background-color: #8A2BE2; /* 버튼 배경색 */
+        color: white; /* 글자색 */
+        border-radius: 12px; /* 둥근 모서리 */
+        border: none; /* 테두리 없애기 */
+        padding: 10px 20px; /* 버튼 안쪽 여백 */
+        font-size: 1.1em; /* 글자 크기 */
+        transition: 0.3s; /* 부드러운 전환 효과 */
+    }
+    .stButton>button:hover {
+        background-color: #6A0DAD; /* 호버 시 색상 변경 */
+        transform: translateY(-2px); /* 살짝 위로 뜨는 효과 */
+    }
+
+    /* 알림창 (info, success, warning) 스타일 */
+    .stAlert {
+        border-radius: 8px; /* 둥근 모서리 */
+        font-size: 1.1em;
+    }
+    .st-bu { /* st.info 박스 */
+        background-color: #e6f7ff;
+        border-left: 8px solid #36a2eb;
+    }
+    .st-cq { /* st.success 박스 */
+        background-color: #e9ffea;
+        border-left: 8px solid #28a745;
+    }
+    .st-bV { /* st.warning 박스 */
+        background-color: #fff9e6;
+        border-left: 8px solid #ffc107;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True # HTML/CSS 코드 적용 허용
+)
+
+# --- 1. 정적 설정 (이미지 폴더 경로) ---
 ART_IMAGES_DIR = "art_images"
-# 만약 'art_images' 폴더가 없다면 생성 (Streamlit Cloud에서는 직접 업로드해야 할 수 있음)
+# 만약 art_images 폴더가 없으면 만들어줘 (로컬 개발용)
 if not os.path.exists(ART_IMAGES_DIR):
     os.makedirs(ART_IMAGES_DIR)
 
-# --- 3. 핵심! 애니/만화 테마와 명화 데이터베이스 (다양한 장르로 확장!) ---
+# --- 2. 데이터 매핑: 애니/만화 테마와 명화 (이 부분이 핵심 데이터!) ---
+# 민하음이 이미 준비해둔 이미지 파일 이름들과 1:1로 매칭돼야 해!
 anime_art_mapping = {
     "복수극/다크 히어로": [
         {
@@ -151,64 +233,113 @@ anime_art_mapping = {
     ]
 }
 
-# --- 4. 사용자 입력 섹션 ---
+# --- 3. 사이드바 (꾸밈 + 사용 가이드) ---
+with st.sidebar:
+    st.markdown("<h2 style='color:#4B0082;'>✨ 내 취향 명화 찾기 도우미 ✨</h2>", unsafe_allow_html=True)
+    st.write("안녕하세요, 민하음님! 이 앱은 애니메이션/만화 장르와 서양 명화 스토리를 연결해주는 매칭 시스템입니다. 🎨📚")
 
-# 작품 사진 업로드 (선택 사항 - 사진 분석은 안 되고, 사용자 흥미 유발 및 컨텍스트 제공용)
-uploaded_file = st.file_uploader("좋아하는 애니메이션/만화의 한 장면을 업로드해보세요 (선택 사항)", type=["jpg", "jpeg", "png"])
-if uploaded_file is not None:
-    st.image(uploaded_file, caption="업로드한 작품", use_column_width=True)
-    st.write("멋진 작품이네요! 이제 아래에서 장르를 선택해 주세요.")
+    st.markdown("---")
+    st.subheader("💡 사용 가이드")
+    st.write("1. 좋아하는 애니/만화의 **장르/테마**를 메인 화면에서 선택하세요. (사진 업로드는 선택 사항!)")
+    st.write("2. '명화 찾기! 뿅!' 버튼을 누르면 관련된 명화를 볼 수 있어요. 🚀")
+    st.write("")
+    st.info("""
+    **🚨 중요: '이미지를 찾을 수 없습니다' 에러 해결 팁 🚨**
 
-# 장르 선택 (드롭다운)
-selected_genre = st.selectbox(
-    "1. 당신이 좋아하는 애니메이션/만화의 핵심 '장르/테마'를 선택해주세요:",
-    ["선택하세요"] + list(anime_art_mapping.keys())
-)
+    **1. 📁 파일 이름/경로 💯% 일치 확인:**
+    - `art_images` 폴더 안에 있는 명화 파일 이름이 아래 리스트와 **한 글자, 대소문자, 확장자까지 정확히 똑같은지** 다시 한 번만 꼼꼼히 확인해 주세요! (예: `pygmalion.jpg`가 `Pygmalion.jpeg`로 되어 있지는 않은지!)
+    - 깃허브 저장소(리포지토리)에 `2025/art_images/` 경로로 파일들이 제대로 올라가 있는지 직접 눈으로 확인하는 게 제일 확실해요!
 
-# 검색 버튼
-if st.button("🖼️ 명화 찾기!"):
-    if selected_genre == "선택하세요":
-        st.warning("장르를 선택해주세요!")
-    else:
-        st.subheader(f"✨ '{selected_genre}' 테마와 어울리는 명화들을 찾았어요! ✨")
+    **2. 🔄 Streamlit 앱 강제 재배포 (Redeploy) 필수!**
+    - 깃허브 변경사항을 스트림릿 클라우드가 바로 반영 못할 때가 있어요.
+    - 웹 브라우저로 `share.streamlit.io` (스트림릿 클라우드 대시보드)에 접속(로그인)하세요.
+    - 배포된 내 앱(`2025/test.py`로 시작하는 앱)을 선택한 뒤, 상세 페이지에서 **`Redeploy`** 버튼을 꼭 눌러주세요! (혹은 점 세 개 버튼(`...`) 안에 있을 수도 있어요!)
+    """)
+    st.markdown("---")
+    st.markdown("<p style='text-align: center; font-size: 0.9em; color: #777;'>Made with ❤️ by 공주 👑</p>", unsafe_allow_html=True)
 
-        if selected_genre in anime_art_mapping:
-            art_recommendations = anime_art_mapping[selected_genre]
+# --- 4. 메인 앱 인터페이스 ---
+st.markdown("<h1 style='color:#4B0082; text-align: center;'>🎨 애니메이션/만화 X 서양 명화: 스토리 연결고리 탐색 📚</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 1.2em; color: #555;'>좋아하는 애니메이션/만화의 장르나 테마를 선택해주세요!<br>당신의 취향과 놀랍도록 닮은 서양 미술 작품과 그 스토리를 찾아드릴게요. 💫</p>", unsafe_allow_html=True)
 
-            # 여러 개의 매칭 결과를 보여줄 수 있도록 반복
-            for i, art_info in enumerate(art_recommendations):
-                st.markdown("---")
-                col1, col2 = st.columns([1, 2]) # 이미지와 설명을 나란히 배치
+st.write("---")
 
-                with col1:
-                    try:
-                        # 이미지 파일을 불러와 표시
-                        img_path = art_info["image_path"]
-                        if os.path.exists(img_path):
-                            image = Image.open(img_path)
-                            st.image(image, caption=f"'{art_info['title']}'", use_column_width=True)
-                        else:
-                            st.error(f"이미지 파일을 찾을 수 없습니다: {img_path}")
-                            st.write("예시 이미지를 `art_images` 폴더에 넣어주세요.")
-                    except Exception as e:
-                        st.error(f"이미지를 로드하는 중 오류가 발생했습니다: {e}")
+# 사용자 입력 섹션 (컬럼으로 나누어 보기 좋게)
+col_upload, col_select = st.columns([1, 2]) # 1:2 비율로 컬럼 나누기
 
-                with col2:
-                    st.markdown(f"### <span style='color:#FF6347;'>{art_info['title']}</span>", unsafe_allow_html=True) # 제목 강조
-                    st.write(f"**작가:** {art_info['artist']}")
-                    st.markdown(f"#### 작품 속 이야기:")
-                    st.write(art_info["story"])
-                    st.markdown(f"#### 🔎 애니메이션/만화와의 연결고리:")
-                    st.info(art_info["connection"]) # info 박스로 강조
+with col_upload:
+    st.subheader("✨ 작품 한 장면 업로드! ✨")
+    uploaded_file = st.file_uploader("🖼️ 좋아하는 애니/만화 한 장면을 올려주세요 (선택 사항)", type=["jpg", "jpeg", "png"])
+    if uploaded_file is not None:
+        st.image(uploaded_file, caption="업로드한 당신의 작품 🎨", use_column_width=True)
+        st.success("✨ 멋진 작품이 업로드됐어요! 이제 오른쪽에서 장르를 선택해 주세요! ✨")
 
+with col_select:
+    st.subheader("👇 핵심 '장르/테마'를 선택해주세요!")
+    selected_genre = st.selectbox(
+        "어떤 테마의 작품을 좋아하시나요?",
+        ["🤔 장르를 선택해주세요..."] + list(anime_art_mapping.keys()),
+        index=0 # 기본 선택값을 첫 번째 옵션으로 지정
+    )
+    st.write("") # 간격 띄우기
+
+    if st.button("🚀 명화 찾기! 뿅!"):
+        if selected_genre == "🤔 장르를 선택해주세요...":
+            st.warning("앗! 장르를 먼저 선택해 주셔야 명화를 찾아드릴 수 있어요! 😥")
         else:
-            st.error("아직 해당 장르에 대한 명화 정보가 없네요. 다른 장르를 선택해주세요.")
+            st.markdown(f"<h2 style='color:#8A2BE2;'>✨ '{selected_genre}' 테마와 어울리는 명화들! ✨</h2>", unsafe_allow_html=True)
+            st.write("당신의 취향은 생각보다 깊고 넓었군요! 두근두근... 어떤 명화와 연결될까요? 두둥탁! 🌟")
 
-st.markdown("---")
-st.markdown("### 👩‍💻 개발자 노트")
-st.write("""
-이 프로그램은 미술과 애니메이션/만화의 경계를 넘어선 스토리텔링의 유사성을 탐구합니다.
-사용자의 취향을 반영한 맞춤형 예술 경험을 제공하며,
-고전 예술의 현대적 재해석 가능성을 보여줍니다.
-(생기부에 이 부분에 너가 뭘 배우고 느꼈는지 더 풍성하게 쓰면 된다!)
-""")
+            if selected_genre in anime_art_mapping:
+                art_recommendations = anime_art_mapping[selected_genre]
+
+                # 매칭된 명화들을 하나씩 표시
+                for i, art_info in enumerate(art_recommendations):
+                    st.markdown("---") # 구분선 추가
+                    st.write("") # 간격 띄우기
+
+                    # 이미지와 설명을 컬럼으로 배치
+                    art_col1, art_col2 = st.columns([1, 2])
+
+                    with art_col1:
+                        try:
+                            img_path = art_info["image_path"]
+                            if os.path.exists(img_path): # 파일이 실제로 존재하는지 확인
+                                image = Image.open(img_path)
+                                st.image(image, caption=f"**{art_info['title']}**", use_column_width=True)
+                            else:
+                                # ✨ 이미지 파일을 못 찾았을 때 뜨는 핵심 에러 메시지 ✨
+                                st.error(f"⚠️ 이미지를 찾을 수 없습니다: `{img_path}`")
+                                st.write("✅ 위에 있는 사이드바 '사용 가이드'를 참고하여 파일명과 경로를 다시 확인해주세요!")
+                        except Exception as e:
+                            # 이미지 파일이 손상되었거나 로딩 중 다른 에러 발생 시
+                            st.error(f"이미지 로딩 중 심각한 오류 발생: {e}")
+                            st.write("✅ 이미지 파일 자체가 손상되었을 수도 있어요. 다시 다운로드해 보세요.")
+
+                    with art_col2:
+                        st.markdown(f"<h3 style='color:#A020F0;'>🖼️ {art_info['title']}</h3>", unsafe_allow_html=True)
+                        st.write(f"**🎨 작가:** {art_info['artist']}")
+                        st.markdown(f"<p style='font-weight: bold; color: #6A5ACD;'>📖 작품 속 이야기:</p>", unsafe_allow_html=True)
+                        st.write(art_info["story"])
+                        st.markdown(f"<p style='font-weight: bold; color: #BA55D3;'>🔗 애니/만화와의 연결고리:</p>", unsafe_allow_html=True)
+                        st.success(art_info["connection"]) # 성공적인 연결 강조
+                        st.write("") # 간격 띄우기
+
+            else:
+                st.error("😭 아쉽지만, 해당 장르에 대한 명화 정보는 아직 없네요. 다른 장르를 선택해주세요!")
+
+st.write("---")
+st.markdown("<p style='text-align: center; font-size: 0.9em; color: #777;'>✨ 이 앱은 미술과 애니메이션/만화의 경계를 넘어선 스토리텔링의 유사성을 탐구합니다. ✨</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 0.8em; color: #999;'>Developed with ❤️ for 민하음 by 공주 👑</p>", unsafe_allow_html=True)
+
+# 푸터/개발자 노트 (깔끔하게 익스팬더로 숨겨두기)
+with st.expander("📚 개발자 노트 / 생기부 활용 팁"):
+    st.markdown("""
+    이 프로젝트는 단순한 코딩을 넘어, **서양 미술사와 애니메이션 스토리텔링을 연결하는 융합적 사고**를 보여줍니다.
+    생기부에 기록할 때 다음 포인트를 강조해 보세요:
+    -   **융합적 사고:** 고전 예술과 현대 콘텐츠의 연결고리를 탐구하며 장르 간 경계를 허물었음.
+    -   **큐레이션 능력:** 직접 명화와 애니메이션 테마를 매칭하며 스토리 분석 및 연결 능력을 증명.
+    -   **문제 해결 능력:** 이미지 경로 문제 등 기술적 난관을 해결하며 프로젝트를 완성한 경험.
+    -   **인문학적 통찰:** 미술 작품에 내재된 깊이 있는 메시지를 이해하고, 이를 애니메이션에 적용할 방안 모색.
+    """)
+    st.info("Tip: '이미지를 찾을 수 없습니다' 에러가 계속 뜬다면, 그 파일을 깃허브에서 삭제 후 다시 정확한 이름으로 업로드하고 Redeploy 해보세요! 이것은 기술적 트러블슈팅 능력을 길러주는 값진 경험입니다. 끈기가 승리합니다!💪")
