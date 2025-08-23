@@ -1,16 +1,16 @@
 import streamlit as st
-from PIL import Image
-import os
+# from PIL import Image # 이미지 관련 라이브러리 제거
+# import os # 파일 시스템 접근 라이브러리 제거
 
 # --- 0. Streamlit 앱 기본 설정 ---
-# 레이아웃을 넓게 해서 이미지를 시원하게 보여주자!
+# 레이아웃을 넓게 해서 텍스트를 시원하게 보여주자!
 st.set_page_config(
     layout="wide",
     page_title="🎨 애니X명화: 스토리 연결고리 탐색 📚",
     initial_sidebar_state="expanded" # 사이드바를 시작부터 열어줘
 )
 
-# ✨ 앱 꾸미기 (CSS 스타일링) ✨
+# ✨ 앱 꾸미기 (CSS 스타일링) - 이전과 동일하게 유지! ✨
 st.markdown(
     """
     <style>
@@ -95,26 +95,23 @@ st.markdown(
 )
 
 # --- 1. 정적 설정 (이미지 폴더 경로) ---
-ART_IMAGES_DIR = "art_images"
-# 만약 art_images 폴더가 없으면 만들어줘 (로컬 개발용)
-if not os.path.exists(ART_IMAGES_DIR):
-    os.makedirs(ART_IMAGES_DIR)
+# ART_IMAGES_DIR = "art_images" # 이미지 경로 설정 제거
 
-# --- 2. 데이터 매핑: 애니/만화 테마와 명화 (이 부분이 핵심 데이터!) ---
-# 민하음이 이미 준비해둔 이미지 파일 이름들과 1:1로 매칭돼야 해!
+# --- 2. 데이터 매핑: 애니/만화 테마와 명화 (image_path 정보 제거) ---
+# image_path 정보를 제거했으니, 더 이상 이미지 파일을 준비할 필요가 없어!
 anime_art_mapping = {
     "복수극/다크 히어로": [
         {
             "title": "홀로페르네스의 목을 자르는 유디트",
             "artist": "아르테미시아 젠틸레스키",
-            "image_path": os.path.join(ART_IMAGES_DIR, "judith.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "judith.jpg"), # 이미지 경로 제거
             "story": "구약성서 '유디트기'에 나오는 이야기로, 홀로페르네스 장군에게 함락 위기에 처한 이스라엘 백성을 구하기 위해 유디트가 적장을 유혹하여 참수하는 극적인 장면을 그린 작품입니다. 절박한 상황 속에서 강인한 여성 영웅이 복수와 구원을 행하는 잔혹하면서도 영웅적인 서사를 담고 있습니다.",
             "connection": "힘없는 존재가 압도적인 강자에 맞서 복수하고 승리하는 서사는 많은 복수극 애니메이션/만화에서 찾아볼 수 있습니다. '정의 구현을 위한 폭력', '어둠 속에서 피어나는 강인함'과 같은 테마가 강렬하게 연결됩니다."
         },
         {
             "title": "다비드와 골리앗",
             "artist": "카라바조",
-            "image_path": os.path.join(ART_IMAGES_DIR, "david_goliath.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "david_goliath.jpg"), # 이미지 경로 제거
             "story": "어린 다윗이 거인 골리앗을 물리치고 그의 목을 베는 구약성서의 이야기입니다. 연약하고 보잘것없어 보이는 존재가 거대한 악을 상대로 정의를 실현하는 극적인 순간을 보여줍니다. 이후 다윗의 자비로운 시선이 인상적입니다.",
             "connection": "압도적인 적에 맞서 약자가 승리하고 복수를 이뤄내는 영웅 서사는 많은 다크 히어로물과 맞닿아 있습니다. 단순히 물리치는 것을 넘어 승리 후의 고뇌나 정의에 대한 재해석도 찾아볼 수 있습니다."
         }
@@ -123,14 +120,14 @@ anime_art_mapping = {
         {
             "title": "페르세우스와 안드로메다",
             "artist": "피에르-폴 루벤스",
-            "image_path": os.path.join(ART_IMAGES_DIR, "perseus.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "perseus.jpg"), # 이미지 경로 제거
             "story": "그리스 신화 속 영웅 페르세우스가 괴물 케토스로부터 공주 안드로메다를 구하는 장면입니다. 페르세우스는 메두사의 목을 벤 후 돌아오던 길에 이 장면을 목격하고, 자신의 용기와 힘으로 위험에 처한 존재를 구원합니다. 영웅의 모험과 성장, 그리고 구원이 담긴 이야기입니다.",
             "connection": "전형적인 소년만화에서 흔히 볼 수 있는 '성장하는 영웅이 고난과 시련을 극복하며 동료를 구하고 세상을 지킨다'는 서사와 맞닿아 있습니다. '용기', '희생', '새로운 세계로의 여정'과 같은 키워드가 명확히 드러납니다."
         },
         {
             "title": "헤라클레스와 히드라",
             "artist": "안토니오 델 폴라이올로",
-            "image_path": os.path.join(ART_IMAGES_DIR, "hercules_hydra.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "hercules_hydra.jpg"), # 이미지 경로 제거
             "story": "그리스 신화의 영웅 헤라클레스가 아홉 개의 머리를 가진 괴물 히드라를 물리치는 장면입니다. 아무리 잘라도 다시 생겨나는 히드라의 머리를 베는 난관을 극복하고, 끊임없이 도전하며 더욱 강해지는 영웅의 모습을 보여줍니다.",
             "connection": "주인공이 강력한 적과의 싸움에서 한계를 느끼고 좌절하지만, 동료의 도움이나 새로운 기술/능력을 얻어 더욱 성장하는 소년만화의 전개와 매우 흡사합니다. '끝없는 시련과 극복', '끈기', '점진적인 강해짐'이 주제입니다."
         }
@@ -139,14 +136,14 @@ anime_art_mapping = {
         {
             "title": "피그말리온과 갈라테아",
             "artist": "장-레옹 제롬",
-            "image_path": os.path.join(ART_IMAGES_DIR, "pygmalion.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "pygmalion.jpg"), # 이미지 경로 제거
             "story": "오비디우스의 '변신 이야기'에 나오는 일화로, 조각가 피그말리온이 자신이 조각한 완벽한 여인상 갈라테아를 너무나 사랑한 나머지, 비너스 여신이 조각상에 생명을 불어넣어 둘이 이루어지는 기적 같은 사랑 이야기입니다. 불가능해 보이는 사랑이 현실이 되는 순간을 담고 있습니다.",
             "connection": "애니메이션/만화에서 자주 등장하는 '넘을 수 없는 벽을 뛰어넘는 사랑', '이루어질 수 없어 보이는 관계가 결국 이어지는 기적', 또는 '피조물과 창조자 간의 특별한 유대'와 같은 로맨틱한 판타지 서사와 유사합니다."
         },
         {
             "title": "다나에",
             "artist": "구스타프 클림트",
-            "image_path": os.path.join(ART_IMAGES_DIR, "danae.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "danae.jpg"), # 이미지 경로 제거
             "story": "그리스 신화 속 다나에는 아버지가 감금했지만, 제우스가 황금비의 형태로 다가가 아들을 낳게 한 이야기입니다. 이 작품은 황금비가 그녀에게 쏟아지는 관능적이고 신비로운 순간을 포착했습니다. 금지되었거나 운명적인 만남, 신비롭고 관능적인 사랑을 암시합니다.",
             "connection": "운명적인 끌림, 비밀스럽거나 금지된 관계, 혹은 초월적인 존재와의 로맨스를 다루는 애니메이션/만화와 통합니다. 시각적으로 화려하면서도 숨겨진 이야기가 매력적입니다."
         }
@@ -155,14 +152,14 @@ anime_art_mapping = {
         {
             "title": "만종",
             "artist": "장-프랑수아 밀레",
-            "image_path": os.path.join(ART_IMAGES_DIR, "angelus.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "angelus.jpg"), # 이미지 경로 제거
             "story": "황혼녘, 감자를 캐던 농부 부부가 멀리서 들려오는 종소리(만종)에 맞춰 경건하게 기도를 올리는 모습을 담은 작품입니다. 고단한 일상 속에서도 평화와 경건함을 잃지 않는 농민들의 소박하지만 숭고한 삶의 단면을 보여줍니다.",
             "connection": "화려한 사건보다 인물들의 내면, 소박한 일상, 잔잔한 감정의 변화에 초점을 맞추는 일상/성장 드라마 장르와 연결됩니다. '소박한 삶 속의 의미', '노동의 가치', '공동체의 유대' 등 평범함 속에서 비범함을 찾는 이야기에 해당합니다."
         },
         {
             "title": "강물",
             "artist": "안드레아스 아헨바흐",
-            "image_path": os.path.join(ART_IMAGES_DIR, "river.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "river.jpg"), # 이미지 경로 제거
             "story": "잔잔하게 흐르는 강물과 그 주변의 풍경, 뱃놀이를 하는 사람들의 평화로운 모습을 그렸습니다. 특별한 사건 없이 흐르는 자연의 모습과 인간의 일상이 조화롭게 어우러진 그림으로, 평온함과 사색을 느끼게 합니다.",
             "connection": "큰 갈등 없이 인물들의 잔잔한 일상과 내면의 성장을 다루는 '치유물' 또는 '슬라이스 오브 라이프' 장르 애니메이션과 어울립니다. 느린 호흡 속에서 삶의 작은 아름다움을 발견하는 스토리에 적합합니다."
         }
@@ -171,14 +168,14 @@ anime_art_mapping = {
         {
             "title": "최후의 심판",
             "artist": "미켈란젤로 (시스티나 성당 프레스코)",
-            "image_path": os.path.join(ART_IMAGES_DIR, "last_judgment.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "last_judgment.jpg"), # 이미지 경로 제거
             "story": "세상의 종말과 심판의 날, 죽은 자들이 부활하여 그리스도 앞에 서는 장엄하고 거대한 장면을 그렸습니다. 천국과 지옥, 선과 악의 대결, 혼돈 속의 질서, 그리고 인간의 운명이 결정되는 압도적인 스케일의 서사를 담고 있습니다.",
             "connection": "이세계물이나 판타지에서 흔히 볼 수 있는 '새로운 세상으로의 전이', '종말론적인 위기', '선과 악의 명확한 대립', '신적 존재와 마법적 능력' 같은 거대한 세계관과 깊은 연관성이 있습니다. 압도적인 스케일과 다양한 군상의 묘사가 특징입니다."
         },
         {
             "title": "천지창조 (아담의 창조)",
             "artist": "미켈란젤로 (시스티나 성당 프레스코 일부)",
-            "image_path": os.path.join(ART_IMAGES_DIR, "creation_adam.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "creation_adam.jpg"), # 이미지 경로 제거
             "story": "하나님이 아담에게 생명의 불꽃을 불어넣는 창조의 순간을 담았습니다. 신적 존재가 새로운 생명이나 세상을 창조하는 경이로운 순간을 표현하며, 태초의 시작과 기원에 대한 상징적인 의미를 지닙니다.",
             "connection": "이세계물의 시작점인 '새로운 세계의 탄생', 혹은 주인공이 '새로운 능력을 각성하거나 힘을 부여받는 순간'과 연결됩니다. 세계관의 기원이나 주인공의 초월적인 힘을 다루는 판타지 서사에 적합합니다."
         }
@@ -187,14 +184,14 @@ anime_art_mapping = {
         {
             "title": "사춘기",
             "artist": "에드바르 뭉크",
-            "image_path": os.path.join(ART_IMAGES_DIR, "adolescence.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "adolescence.jpg"), # 이미지 경로 제거
             "story": "어둠 속에 앉아 불안하고 혼란스러운 표정으로 정면을 응시하는 소녀의 모습입니다. 미지의 존재처럼 드리워진 어두운 그림자는 내면의 불안과 성장에 대한 두려움, 그리고 홀로 마주해야 하는 청소년기의 고민을 상징적으로 보여줍니다.",
             "connection": "청소년기의 예민한 감정, 정체성 혼란, 우정의 미묘함, 미래에 대한 막연한 불안감 등 학원물과 청춘 드라마에서 다루는 보편적인 성장통의 주제와 일치합니다. 내면 묘사가 중요한 작품에 해당합니다."
         },
         {
             "title": "들판의 춤",
             "artist": "피에르 오귀스트 르누아르",
-            "image_path": os.path.join(ART_IMAGES_DIR, "field_dance.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "field_dance.jpg"), # 이미지 경로 제거
             "story": "푸른 들판에서 춤을 추는 두 남녀의 모습을 밝고 생동감 넘치는 터치로 그렸습니다. 햇살 가득한 배경과 인물들의 행복한 표정에서 젊음의 활기와 풋풋한 사랑, 혹은 순수한 기쁨이 느껴집니다. 특별한 사건보다는 순간의 아름다움을 포착했습니다.",
             "connection": "학창 시절의 풋풋한 로맨스, 친구들과의 즐거운 일상, 청춘의 빛나는 순간들을 다루는 학원 로맨스나 성장 애니메이션의 밝고 따뜻한 분위기와 연결됩니다. '찬란한 시절', '함께하는 즐거움'이 주제입니다."
         }
@@ -203,14 +200,14 @@ anime_art_mapping = {
         {
             "title": "절규",
             "artist": "에드바르 뭉크",
-            "image_path": os.path.join(ART_IMAGES_DIR, "scream.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "scream.jpg"), # 이미지 경로 제거
             "story": "다리 위에서 귀를 막고 비명을 지르는 듯한 인물의 모습과 뒤틀린 배경은 극심한 불안과 공포, 고독, 그리고 현대인의 실존적 위기를 표현합니다. 내면의 소용돌이치는 감정이 외적인 형태로 폭발하는 순간을 시각화했습니다.",
             "connection": "정신적인 압박감, 극한의 공포, 해결되지 않는 미스터리로 인한 긴장감, 그리고 인물의 불안정한 심리를 파고드는 스릴러/심리물 애니메이션과 깊이 연결됩니다. 예측 불가능한 상황과 비극적인 결말을 암시하기도 합니다."
         },
         {
             "title": "사투르누스가 아들을 삼키다",
             "artist": "프란시스코 고야",
-            "image_path": os.path.join(ART_IMAGES_DIR, "saturn.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "saturn.jpg"), # 이미지 경로 제거
             "story": "그리스 신화의 크로노스(로마 신화의 사투르누스)가 자신의 왕좌를 빼앗길까 두려워 자식들을 잡아먹는 잔혹한 신화를 그렸습니다. 광기 어린 표정과 어두운 색감은 인간 내면의 광기와 공포, 파괴적인 본성을 여과 없이 보여줍니다.",
             "connection": "숨겨진 비밀, 비인간적인 행위, 통제 불가능한 광기, 그리고 잔혹하고 피폐한 세계관을 다루는 하드코어 스릴러나 다크 판타지 애니메이션과 유사합니다. 인물의 타락이나 집착에 대한 심리 묘사와도 연결됩니다."
         }
@@ -219,14 +216,14 @@ anime_art_mapping = {
         {
             "title": "피아노 치는 소녀들",
             "artist": "피에르 오귀스트 르누아르",
-            "image_path": os.path.join(ART_IMAGES_DIR, "piano_girls.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "piano_girls.jpg"), # 이미지 경로 제거
             "story": "피아노를 함께 연주하며 즐거운 시간을 보내는 두 소녀의 모습을 포착했습니다. 밝고 따뜻한 색감과 부드러운 터치로 음악이 주는 즐거움, 그리고 예술 활동을 통해 교감하고 성장하는 모습을 담았습니다.",
             "connection": "아이돌이나 음악을 테마로 한 애니메이션에서 흔히 볼 수 있는 '함께 음악을 만들며 교감하고 성장하는 우정', '예술 활동을 통한 자아 실현', '재능을 꽃피우는 아름다운 순간'과 연결됩니다. 즐겁고 긍정적인 분위기가 특징입니다."
         },
         {
             "title": "발레 수업",
             "artist": "에드가 드가",
-            "image_path": os.path.join(ART_IMAGES_DIR, "ballet_class.jpg"),
+            # "image_path": os.path.join(ART_IMAGES_DIR, "ballet_class.jpg"), # 이미지 경로 제거
             "story": "발레 연습실의 일상적인 모습을 그린 작품으로, 무대 위의 화려함 뒤에 숨겨진 발레리나들의 꾸밈없는 연습 모습과 힘든 노력을 담고 있습니다. 예술가의 피땀 어린 노력과 열정, 그리고 보이지 않는 곳에서의 고군분투를 묘사합니다.",
             "connection": "겉으로 화려해 보이는 예술 세계의 이면에 숨겨진 끊임없는 연습과 노력, 경쟁, 그리고 꿈을 향한 열정을 다루는 애니메이션과 유사합니다. '성공을 위한 땀과 눈물', '예술가의 고뇌와 성장'을 보여줍니다."
         }
@@ -240,23 +237,18 @@ with st.sidebar:
 
     st.markdown("---")
     st.subheader("💡 사용 가이드")
-    st.write("1. 좋아하는 애니/만화의 **장르/테마**를 메인 화면에서 선택하세요. (사진 업로드는 선택 사항!)")
+    st.write("1. 좋아하는 애니/만화의 **장르/테마**를 메인 화면에서 선택하세요.")
     st.write("2. '명화 찾기! 뿅!' 버튼을 누르면 관련된 명화를 볼 수 있어요. 🚀")
     st.write("")
     st.info("""
-    **🚨 중요: '이미지를 찾을 수 없습니다' 에러 해결 팁 🚨**
+    **🚨 중요 안내 🚨**
 
-    **1. 📁 파일 이름/경로 💯% 일치 확인:**
-    - `art_images` 폴더 안에 있는 명화 파일 이름이 아래 리스트와 **한 글자, 대소문자, 확장자까지 정확히 똑같은지** 다시 한 번만 꼼꼼히 확인해 주세요! (예: `pygmalion.jpg`가 `Pygmalion.jpeg`로 되어 있지는 않은지!)
-    - 깃허브 저장소(리포지토리)에 `2025/art_images/` 경로로 파일들이 제대로 올라가 있는지 직접 눈으로 확인하는 게 제일 확실해요!
-
-    **2. 🔄 Streamlit 앱 강제 재배포 (Redeploy) 필수!**
-    - 깃허브 변경사항을 스트림릿 클라우드가 바로 반영 못할 때가 있어요.
-    - 웹 브라우저로 `share.streamlit.io` (스트림릿 클라우드 대시보드)에 접속(로그인)하세요.
-    - 배포된 내 앱(`2025/test.py`로 시작하는 앱)을 선택한 뒤, 상세 페이지에서 **`Redeploy`** 버튼을 꼭 눌러주세요! (혹은 점 세 개 버튼(`...`) 안에 있을 수도 있어요!)
+    이 버전은 이미지 파일을 불러오는 기능을 임시로 제거하여
+    오류 없이 핵심 기능인 '스토리 매칭'에 집중할 수 있도록 개선되었습니다.
+    나중에 이미지를 추가하고 싶다면, 다시 코드를 수정해야 합니다!
     """)
     st.markdown("---")
-    st.markdown("<p style='text-align: center; font-size: 0.9em; color: #777;'>Made with ❤️ by 공주 👑</p>", unsafe_allow_html=True)
+    # 'Developed with ❤️ for 민하음 by 공주 👑' 문구를 제거했어!
 
 # --- 4. 메인 앱 인터페이스 ---
 st.markdown("<h1 style='color:#4B0082; text-align: center;'>🎨 애니메이션/만화 X 서양 명화: 스토리 연결고리 탐색 📚</h1>", unsafe_allow_html=True)
@@ -264,73 +256,46 @@ st.markdown("<p style='text-align: center; font-size: 1.2em; color: #555;'>좋�
 
 st.write("---")
 
-# 사용자 입력 섹션 (컬럼으로 나누어 보기 좋게)
-col_upload, col_select = st.columns([1, 2]) # 1:2 비율로 컬럼 나누기
+# 사용자 입력 섹션 (이전과 달리 이미지 업로드 기능 제거)
+st.subheader("👇 핵심 '장르/테마'를 선택해주세요!")
+selected_genre = st.selectbox(
+    "어떤 테마의 작품을 좋아하시나요?",
+    ["🤔 장르를 선택해주세요..."] + list(anime_art_mapping.keys()),
+    index=0 # 기본 선택값을 첫 번째 옵션으로 지정
+)
+st.write("") # 간격 띄우기
 
-with col_upload:
-    st.subheader("✨ 작품 한 장면 업로드! ✨")
-    uploaded_file = st.file_uploader("🖼️ 좋아하는 애니/만화 한 장면을 올려주세요 (선택 사항)", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        st.image(uploaded_file, caption="업로드한 당신의 작품 🎨", use_column_width=True)
-        st.success("✨ 멋진 작품이 업로드됐어요! 이제 오른쪽에서 장르를 선택해 주세요! ✨")
+if st.button("🚀 명화 찾기! 뿅!"):
+    if selected_genre == "🤔 장르를 선택해주세요...":
+        st.warning("앗! 장르를 먼저 선택해 주셔야 명화를 찾아드릴 수 있어요! 😥")
+    else:
+        st.markdown(f"<h2 style='color:#8A2BE2;'>✨ '{selected_genre}' 테마와 어울리는 명화들! ✨</h2>", unsafe_allow_html=True)
+        st.write("당신의 취향은 생각보다 깊고 넓었군요! 두근두근... 어떤 명화와 연결될까요? 두둥탁! 🌟")
 
-with col_select:
-    st.subheader("👇 핵심 '장르/테마'를 선택해주세요!")
-    selected_genre = st.selectbox(
-        "어떤 테마의 작품을 좋아하시나요?",
-        ["🤔 장르를 선택해주세요..."] + list(anime_art_mapping.keys()),
-        index=0 # 기본 선택값을 첫 번째 옵션으로 지정
-    )
-    st.write("") # 간격 띄우기
+        if selected_genre in anime_art_mapping:
+            art_recommendations = anime_art_mapping[selected_genre]
 
-    if st.button("🚀 명화 찾기! 뿅!"):
-        if selected_genre == "🤔 장르를 선택해주세요...":
-            st.warning("앗! 장르를 먼저 선택해 주셔야 명화를 찾아드릴 수 있어요! 😥")
+            # 매칭된 명화들을 하나씩 표시
+            for i, art_info in enumerate(art_recommendations):
+                st.markdown("---") # 구분선 추가
+                st.write("") # 간격 띄우기
+
+                # 이제 이미지를 표시하는 컬럼/코드 없이 텍스트만 바로 표시!
+                # (혹시나해서 image_path 관련 코드 통째로 제거함)
+                st.markdown(f"<h3 style='color:#A020F0;'>🖼️ {art_info['title']}</h3>", unsafe_allow_html=True)
+                st.write(f"**🎨 작가:** {art_info['artist']}")
+                st.markdown(f"<p style='font-weight: bold; color: #6A5ACD;'>📖 작품 속 이야기:</p>", unsafe_allow_html=True)
+                st.write(art_info["story"])
+                st.markdown(f"<p style='font-weight: bold; color: #BA55D3;'>🔗 애니/만화와의 연결고리:</p>", unsafe_allow_html=True)
+                st.success(art_info["connection"]) # 성공적인 연결 강조
+                st.write("") # 간격 띄우기
+
         else:
-            st.markdown(f"<h2 style='color:#8A2BE2;'>✨ '{selected_genre}' 테마와 어울리는 명화들! ✨</h2>", unsafe_allow_html=True)
-            st.write("당신의 취향은 생각보다 깊고 넓었군요! 두근두근... 어떤 명화와 연결될까요? 두둥탁! 🌟")
-
-            if selected_genre in anime_art_mapping:
-                art_recommendations = anime_art_mapping[selected_genre]
-
-                # 매칭된 명화들을 하나씩 표시
-                for i, art_info in enumerate(art_recommendations):
-                    st.markdown("---") # 구분선 추가
-                    st.write("") # 간격 띄우기
-
-                    # 이미지와 설명을 컬럼으로 배치
-                    art_col1, art_col2 = st.columns([1, 2])
-
-                    with art_col1:
-                        try:
-                            img_path = art_info["image_path"]
-                            if os.path.exists(img_path): # 파일이 실제로 존재하는지 확인
-                                image = Image.open(img_path)
-                                st.image(image, caption=f"**{art_info['title']}**", use_column_width=True)
-                            else:
-                                # ✨ 이미지 파일을 못 찾았을 때 뜨는 핵심 에러 메시지 ✨
-                                st.error(f"⚠️ 이미지를 찾을 수 없습니다: `{img_path}`")
-                                st.write("✅ 위에 있는 사이드바 '사용 가이드'를 참고하여 파일명과 경로를 다시 확인해주세요!")
-                        except Exception as e:
-                            # 이미지 파일이 손상되었거나 로딩 중 다른 에러 발생 시
-                            st.error(f"이미지 로딩 중 심각한 오류 발생: {e}")
-                            st.write("✅ 이미지 파일 자체가 손상되었을 수도 있어요. 다시 다운로드해 보세요.")
-
-                    with art_col2:
-                        st.markdown(f"<h3 style='color:#A020F0;'>🖼️ {art_info['title']}</h3>", unsafe_allow_html=True)
-                        st.write(f"**🎨 작가:** {art_info['artist']}")
-                        st.markdown(f"<p style='font-weight: bold; color: #6A5ACD;'>📖 작품 속 이야기:</p>", unsafe_allow_html=True)
-                        st.write(art_info["story"])
-                        st.markdown(f"<p style='font-weight: bold; color: #BA55D3;'>🔗 애니/만화와의 연결고리:</p>", unsafe_allow_html=True)
-                        st.success(art_info["connection"]) # 성공적인 연결 강조
-                        st.write("") # 간격 띄우기
-
-            else:
-                st.error("😭 아쉽지만, 해당 장르에 대한 명화 정보는 아직 없네요. 다른 장르를 선택해주세요!")
+            st.error("😭 아쉽지만, 해당 장르에 대한 명화 정보는 아직 없네요. 다른 장르를 선택해주세요!")
 
 st.write("---")
 st.markdown("<p style='text-align: center; font-size: 0.9em; color: #777;'>✨ 이 앱은 미술과 애니메이션/만화의 경계를 넘어선 스토리텔링의 유사성을 탐구합니다. ✨</p>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 0.8em; color: #999;'>Developed with ❤️ for 민하음 by 공주 👑</p>", unsafe_allow_html=True)
+# 'Developed with ❤️ for 민하음 by 공주 👑' 문구를 제거했어!
 
 # 푸터/개발자 노트 (깔끔하게 익스팬더로 숨겨두기)
 with st.expander("📚 개발자 노트 / 생기부 활용 팁"):
@@ -339,7 +304,6 @@ with st.expander("📚 개발자 노트 / 생기부 활용 팁"):
     생기부에 기록할 때 다음 포인트를 강조해 보세요:
     -   **융합적 사고:** 고전 예술과 현대 콘텐츠의 연결고리를 탐구하며 장르 간 경계를 허물었음.
     -   **큐레이션 능력:** 직접 명화와 애니메이션 테마를 매칭하며 스토리 분석 및 연결 능력을 증명.
-    -   **문제 해결 능력:** 이미지 경로 문제 등 기술적 난관을 해결하며 프로젝트를 완성한 경험.
     -   **인문학적 통찰:** 미술 작품에 내재된 깊이 있는 메시지를 이해하고, 이를 애니메이션에 적용할 방안 모색.
     """)
-    st.info("Tip: '이미지를 찾을 수 없습니다' 에러가 계속 뜬다면, 그 파일을 깃허브에서 삭제 후 다시 정확한 이름으로 업로드하고 Redeploy 해보세요! 이것은 기술적 트러블슈팅 능력을 길러주는 값진 경험입니다. 끈기가 승리합니다!💪")
+    st.info("Tip: 모든 기능을 한 번에 완벽하게 만들려고 하기보다는, 핵심 기능을 먼저 구현하고 점진적으로 완성해나가는 과정도 중요합니다! 오류 해결 과정도 값진 경험입니다. 끈기가 승리합니다!💪")
