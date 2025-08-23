@@ -1,6 +1,6 @@
 import streamlit as st
-from PIL import Image # 사용자 이미지 업로드를 위해 필요
-import os # 사용자 이미지 업로드 기능을 위한 os 모듈은 여전히 필요 (내부 처리)
+# from PIL import Image # 이미지 관련 라이브러리 제거
+# import os # 파일 시스템 접근 라이브러리 제거
 
 # --- 0. Streamlit 앱 기본 설정 ---
 # Noto Serif KR 폰트 (전통적 미감)와 Nanum Pen Script (손글씨 느낌)을 불러온다.
@@ -21,15 +21,10 @@ st.markdown(
     <style>
     /* 전체 페이지 배경색 및 폰트 */
     .stApp {
-        background-color: #F8F8F8; /* 아주 연한 백색, 전통 배경 느낌 */
+        background-color: #F8F8F8; /* 기본 배경: 아주 연한 백색 */
+        /* 배경에 은은한 그라데이션과 한지 느낌 추가 (외부 이미지 파일 없음!) */
+        background: linear-gradient(135deg, #F8F8F8 0%, #EEEEF2 50%, #F8F8F8 100%);
         font-family: 'Noto Serif KR', serif; /* Noto Serif KR 폰트 적용 */
-        /* 🌟 전통 문양 배경 이미지 URL (여기에 네 이미지 URL 넣기!) 🌟 */
-        /* 투명도 조절로 너무 강하지 않게 */
-        /* 예시 URL: https://raw.githubusercontent.com/streamlit/streamlit/master/docs/img/streamlit-logo-full.png */
-        background-image: url('YOUR_PATTERN_IMAGE_RAW_URL_HERE'); /* <- 여기에 너의 패턴 이미지 RAW URL */
-        background-repeat: repeat; /* 패턴 반복 */
-        background-size: 150px; /* 패턴 크기 조절 */
-        opacity: 1.0; /* 투명도 조절 (0.8~1.0 사이 추천) */
         animation: fadeIn 1s ease-in-out; /* 전체 페이지 페이드인 애니메이션 */
     }
     
@@ -171,7 +166,7 @@ st.markdown(
     unsafe_allow_html=True # HTML/CSS 코드 적용 허용
 )
 
-# --- 2. 데이터 매핑: 애니/만화 테마와 명화 (image_path 정보는 없음) ---
+# --- 2. 데이터 매핑: 애니/만화 테마와 명화 ---
 # 이 부분의 데이터는 이전과 동일하게 유지!
 anime_art_mapping = {
     "복수극/다크 히어로": [
@@ -303,89 +298,57 @@ with st.sidebar:
 
     이 버전은 명화 이미지를 직접 표시하지 않고
     스토리 매칭 기능에 집중하도록 개선되었습니다.
-    사용자의 작품 이미지는 업로드할 수 있습니다!
+    어떤 이미지 파일도 불러오지 않으므로
+    더 이상 이미지 로딩 오류가 발생하지 않습니다!
     """)
     st.markdown("---")
 
 # --- 4. 메인 앱 인터페이스 ---
 st.markdown("<h1 style='text-align: center;'>🎨 애니메이션/만화 X 서양 명화: 스토리 연결고리 탐색 📚</h1>", unsafe_allow_html=True)
 
-# ✨ GIF 이미지 추가 부분 ✨
-# 여기에 네가 선택한 GIF 이미지의 URL을 넣어줘! (RAW URL)
-# 예시: https://raw.githubusercontent.com/username/repo/main/path/to/your/image.gif
-st.image("YOUR_GIF_IMAGE_RAW_URL_HERE", # <--- 여기에 GIF 이미지 RAW URL을 넣어주세요!
-          caption="스토리와 예술의 만남 🌟", # 이미지 아래에 표시될 캡션
-          width=300, # 이미지 너비 조절 (픽셀 단위)
-          use_column_width=False # True로 하면 컬럼 너비에 맞춰지고, False면 width 값 적용
-          )
-
-# 이미지가 중앙 정렬되도록 CSS 추가
-st.markdown("""
-    <style>
-    /* 이 st.image에 적용되는 css */
-    div.stImage > img {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 10px; /* 이미지에도 둥근 모서리 */
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 이미지 그림자 */
-    }
-    .stImage { /* 캡션과 이미지 컨테이너 */
-        margin-bottom: 2em; /* 이미지와 아래 텍스트 사이 여백 */
-    }
-    </style>
-    """, unsafe_allow_html=True)
+# ✨ GIF 이미지 추가 부분은 이제 없음! ✨
 
 st.markdown("<p style='text-align: center; font-size: 1.2em; color: #555;'>좋아하는 애니메이션/만화의 장르나 테마를 선택해주세요!<br>당신의 취향과 놀랍도록 닮은 서양 미술 작품과 그 스토리를 찾아드릴게요. 💫</p>", unsafe_allow_html=True)
 
 st.write("---")
 
-# 사용자 이미지 업로드 섹션
-col_upload, col_select = st.columns([1, 2]) # 1:2 비율로 컬럼 나누기
+# 사용자 이미지 업로드 섹션도 이제 없음!
+# 예전의 col_upload, col_select 컬럼 분할 제거하고 전체 폭 사용
+st.subheader("👇 핵심 '장르/테마'를 선택해주세요!")
+selected_genre = st.selectbox(
+    "어떤 테마의 작품을 좋아하시나요?",
+    ["🤔 장르를 선택해주세요..."] + list(anime_art_mapping.keys()),
+    index=0 # 기본 선택값을 첫 번째 옵션으로 지정
+)
+st.write("") # 간격 띄우기
 
-with col_upload:
-    st.subheader("✨ 작품 한 장면 업로드! ✨")
-    uploaded_file = st.file_uploader("🖼️ 좋아하는 애니/만화 한 장면을 올려주세요 (선택 사항)", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        st.image(uploaded_file, caption="업로드한 당신의 작품 🎨", use_column_width=True)
-        st.success("✨ 멋진 작품이 업로드됐어요! 이제 오른쪽에서 장르를 선택해 주세요! ✨")
+if st.button("🚀 명화 찾기! 뿅!"):
+    if selected_genre == "🤔 장르를 선택해주세요...":
+        st.warning("앗! 장르를 먼저 선택해 주셔야 명화를 찾아드릴 수 있어요! 😥")
+    else:
+        st.markdown(f"<h2 style='color:#8A2BE2;'>✨ '{selected_genre}' 테마와 어울리는 명화들! ✨</h2>", unsafe_allow_html=True)
+        st.write("당신의 취향은 생각보다 깊고 넓었군요! 두근두근... 어떤 명화와 연결될까요? 두둥탁! 🌟")
 
-with col_select:
-    st.subheader("👇 핵심 '장르/테마'를 선택해주세요!")
-    selected_genre = st.selectbox(
-        "어떤 테마의 작품을 좋아하시나요?",
-        ["🤔 장르를 선택해주세요..."] + list(anime_art_mapping.keys()),
-        index=0 # 기본 선택값을 첫 번째 옵션으로 지정
-    )
-    st.write("") # 간격 띄우기
+        if selected_genre in anime_art_mapping:
+            art_recommendations = anime_art_mapping[selected_genre]
 
-    if st.button("🚀 명화 찾기! 뿅!"):
-        if selected_genre == "🤔 장르를 선택해주세요...":
-            st.warning("앗! 장르를 먼저 선택해 주셔야 명화를 찾아드릴 수 있어요! 😥")
-        else:
-            st.markdown(f"<h2 style='color:#8A2BE2;'>✨ '{selected_genre}' 테마와 어울리는 명화들! ✨</h2>", unsafe_allow_html=True)
-            st.write("당신의 취향은 생각보다 깊고 넓었군요! 두근두근... 어떤 명화와 연결될까요? 두둥탁! 🌟")
-
-            if selected_genre in anime_art_mapping:
-                art_recommendations = anime_art_mapping[selected_genre]
-
-                # 매칭된 명화들을 하나씩 표시 (CSS 애니메이션 클래스 적용!)
-                for i, art_info in enumerate(art_recommendations):
-                    st.markdown(f"""
-                    <div class="art-result-card" style="animation-delay: {i * 0.15}s;"> <!-- 순차적 등장 딜레이 -->
-                        <h3 style='color:#A020F0;'>🖼️ {art_info['title']}</h3>
-                        <p><strong>🎨 작가:</strong> {art_info['artist']}</p>
-                        <p style='font-weight: bold; color: #6A5ACD;'>📖 작품 속 이야기:</p>
-                        <p>{art_info["story"]}</p>
-                        <p style='font-weight: bold; color: #BA55D3;'>🔗 애니/만화와의 연결고리:</p>
-                        <div class="stAlert st-cq" style="margin-left: 0; margin-right: 0;">
-                            <p>{art_info["connection"]}</p>
-                        </div>
+            # 매칭된 명화들을 하나씩 표시 (CSS 애니메이션 클래스 적용!)
+            for i, art_info in enumerate(art_recommendations):
+                st.markdown(f"""
+                <div class="art-result-card" style="animation-delay: {i * 0.15}s;"> <!-- 순차적 등장 딜레이 -->
+                    <h3 style='color:#A020F0;'>🖼️ {art_info['title']}</h3>
+                    <p><strong>🎨 작가:</strong> {art_info['artist']}</p>
+                    <p style='font-weight: bold; color: #6A5ACD;'>📖 작품 속 이야기:</p>
+                    <p>{art_info["story"]}</p>
+                    <p style='font-weight: bold; color: #BA55D3;'>🔗 애니/만화와의 연결고리:</p>
+                    <div class="stAlert st-cq" style="margin-left: 0; margin-right: 0;">
+                        <p>{art_info["connection"]}</p>
                     </div>
-                    """, unsafe_allow_html=True)
+                </div>
+                """, unsafe_allow_html=True)
 
-            else:
-                st.error("😭 아쉽지만, 해당 장르에 대한 명화 정보는 아직 없네요. 다른 장르를 선택해주세요!")
+        else:
+            st.error("😭 아쉽지만, 해당 장르에 대한 명화 정보는 아직 없네요. 다른 장르를 선택해주세요!")
 
 st.write("---")
 st.markdown("<p style='text-align: center; font-size: 0.9em; color: #777;'>✨ 이 앱은 미술과 애니메이션/만화의 경계를 넘어선 스토리텔링의 유사성을 탐구합니다. ✨</p>", unsafe_allow_html=True)
@@ -399,4 +362,3 @@ with st.expander("📚 개발자 노트 / 생기부 활용 팁"):
     -   **큐레이션 능력:** 직접 명화와 애니메이션 테마를 매칭하며 스토리 분석 및 연결 능력을 증명.
     -   **인문학적 통찰:** 미술 작품에 내재된 깊이 있는 메시지를 이해하고, 이를 애니메이션에 적용할 방안 모색.
     """)
-    # 불필요한 Tip 문구는 이미 삭제되어 있음!
