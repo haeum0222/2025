@@ -66,17 +66,31 @@ st.markdown(
         font-size: 3.5em; /* 글자 크기 키우기 */
         margin-bottom: 0.5em; /* 여백 추가 */
         letter-spacing: -2px; /* 글자 간격 살짝 줄이기 */
-        text-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* 제목 그림자 */
+        /* 제목 그림자는 애니메이션으로 별도 부여 */
         font-family: 'Nanum Pen Script', cursive; /* 손글씨 폰트 적용 */
-        animation: titleEntry 1s ease-out forwards; /* 제목 등장 애니메이션 */
-        opacity: 0; /* 초기 투명도 0 */
+        opacity: 0; /* 초기 투명도 0 -> 애니메이션으로 보이게 */
+
+        /* ✨ 제목 애니메이션: 등장 효과 + 계속 반짝이는 효과 ✨ */
+        /* 1. titleEntry (등장 애니메이션): 1초간 실행 후 최종 상태 유지 (forwards) */
+        /* 2. pulsatingGlow (계속 반짝이는 애니메이션): 1초 대기 후 2초간 실행, 무한 반복 */
+        animation: titleEntry 1s ease-out forwards, pulsatingGlow 2s ease-in-out 1s infinite;
     }
-    /* 제목 등장 애니메이션 (살짝 커지면서 나타남) */
+
+    /* 🔑 애니메이션 정의 🔑 */
+    /* 1. 제목 등장 애니메이션 (살짝 커지면서 나타남) */
     @keyframes titleEntry {
       0% { transform: scale(0.8); opacity: 0; }
       80% { transform: scale(1.05); opacity: 1; }
-      100% { transform: scale(1); }
+      100% { transform: scale(1); opacity: 1; } /* 100%에서 투명도 1로 고정 (forwards에 필요) */
     }
+
+    /* 2. 제목 주변 은은하게 반짝이는 (pulsating glow) 애니메이션 */
+    @keyframes pulsatingGlow {
+      0% { text-shadow: 2px 2px 5px rgba(0,0,0,0.2), 0 0 5px rgba(178, 34, 34, 0.4); } /* 살짝 빛나기 */
+      50% { text-shadow: 2px 2px 5px rgba(0,0,0,0.2), 0 0 15px rgba(178, 34, 34, 0.8); } /* 더 강하게 빛나기 */
+      100% { text-shadow: 2px 2px 5px rgba(0,0,0,0.2), 0 0 5px rgba(178, 34, 34, 0.4); } /* 다시 살짝 빛나기 (반복 준비) */
+    }
+
 
     h2 {
         color: #3CB371; /* 미디엄 씨 그린 (비취색 계열) */
@@ -161,6 +175,24 @@ st.markdown(
         background-color: rgba(255, 255, 255, 0.9);
         box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
     }
+
+    /* 🌟 새로 추가: 도입부 텍스트 박스 스타일링 🌟 */
+    .intro-text-box {
+        background: linear-gradient(to right, #FEFEFE, #F7F7F7); /* 아주 은은한 그라데이션 */
+        border: 1px solid #E5E5E5; /* 연한 테두리 */
+        border-radius: 12px; /* 둥근 모서리 */
+        padding: 1.5em 2.5em; /* 넉넉한 안쪽 여백 */
+        margin-top: 1.5em; /* 위쪽 여백 */
+        margin-bottom: 2.5em; /* 아래쪽 여백 */
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05); /* 부드러운 그림자 */
+        text-align: center; /* 텍스트 중앙 정렬 */
+        line-height: 1.6;
+        font-size: 1.15em;
+        color: #444;
+        font-weight: 500;
+        animation: fadeIn 1.2s ease-out; /* 등장 애니메이션 */
+    }
+
     </style>
     """,
     unsafe_allow_html=True # HTML/CSS 코드 적용 허용
@@ -230,7 +262,7 @@ anime_art_mapping = {
             "title": "최후의 심판",
             "artist": "미켈란젤로 (시스티나 성당 프레스코)",
             "story": "세상의 종말과 심판의 날, 죽은 자들이 부활하여 그리스도 앞에 서는 장엄하고 거대한 장면을 그렸습니다. 천국과 지옥, 선과 악의 대결, 혼돈 속의 질서, 그리고 인간의 운명이 결정되는 압도적인 스케일의 서사를 담고 있습니다.",
-            "connection": "이세계물이나 판타지에서 흔히 볼 수 있는 '새로운 세상으로의 전이', '종말론적인 위기', '선과 악의 명확한 대립', '신적 존재와 마법적 능력' 같은 거대한 세계관과 깊은 연관성이 있습니다. 압도적인 스케일과 다양한 군상의 묘사가 특징입니다."
+            "connection": "이세계물이나 판타지에서 흔히 볼 수 있는 '새로운 세상으로의 전이', '종말론적인 위기', '선과 악의 명확한 대립', '신적 존재와 마법적 능력' 같은 거대한 세계관과 깊은 연관성이 있습니다."
         },
         {
             "title": "천지창조 (아담의 창조)",
@@ -293,22 +325,31 @@ with st.sidebar:
     st.write("1. 좋아하는 애니/만화의 **장르/테마**를 메인 화면에서 선택하세요.")
     st.write("2. '명화 찾기! 뿅!' 버튼을 누르면 관련된 명화를 볼 수 있어요. 🚀")
     st.write("")
+    # 🌟 '멋진' 문구로 교체! 🌟
     st.info("""
-    **🚨 중요 안내 🚨**
+    ✨ 오직 이야기와 감동에 집중하세요! ✨
 
-    이 버전은 명화 이미지를 직접 표시하지 않고
-    스토리 매칭 기능에 집중하도록 개선되었습니다.
-    어떤 이미지 파일도 불러오지 않으므로
-    더 이상 이미지 로딩 오류가 발생하지 않습니다!
+    본 앱은 이미지의 시각적 요소 대신,
+    애니메이션과 명화에 담긴 서사(Narrative)와 주제 의식의
+    순수한 연결에 초점을 맞춥니다.
+    당신의 상상력이 이끄는 예술적 여정을 경험해 보세요.
     """)
     st.markdown("---")
 
 # --- 4. 메인 앱 인터페이스 ---
 st.markdown("<h1 style='text-align: center;'>🎨 애니메이션/만화 X 서양 명화: 스토리 연결고리 탐색 📚</h1>", unsafe_allow_html=True)
 
-# ✨ GIF 이미지 추가 부분은 이제 없음! ✨
+# ✨ GIF 이미지 넣는 부분도 아예 없음! ✨
+# ✨ 사용자 이미지 업로드 칸도 아예 없음! ✨
 
-st.markdown("<p style='text-align: center; font-size: 1.2em; color: #555;'>좋아하는 애니메이션/만화의 장르나 테마를 선택해주세요!<br>당신의 취향과 놀랍도록 닮은 서양 미술 작품과 그 스토리를 찾아드릴게요. 💫</p>", unsafe_allow_html=True)
+# 🌟 새로 추가: 도입부 텍스트 박스 🌟
+st.markdown("""
+<div class="intro-text-box">
+    <p>좋아하는 애니메이션/만화의 장르나 테마를 선택해주세요!<br>
+    당신의 취향과 놀랍도록 닮은 서양 미술 작품과 그 스토리를 찾아드릴게요. 💫</p>
+</div>
+""", unsafe_allow_html=True)
+
 
 st.write("---")
 
