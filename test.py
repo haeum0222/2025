@@ -2,6 +2,12 @@ import streamlit as st
 from PIL import Image # 사용자 이미지 업로드를 위해 다시 활성화!
 import os # 사용자 이미지 업로드와 내부 경로 설정을 위해 다시 활성화!
 
+# --- Google Fonts 임포트 ---
+# Noto Serif KR 폰트를 불러와 전통적인 느낌을 주면서도 가독성을 높인다.
+st.markdown("""
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    """, unsafe_allow_html=True)
+
 # --- 0. Streamlit 앱 기본 설정 ---
 st.set_page_config(
     layout="wide",
@@ -9,97 +15,148 @@ st.set_page_config(
     initial_sidebar_state="expanded" # 사이드바를 시작부터 열어줘
 )
 
-# ✨ 앱 꾸미기 (CSS 스타일링) - 이전과 동일하게 유지! ✨
+# ✨ 앱 꾸미기 (CSS 스타일링) - 전통 색감, 폰트, 애니메이션 요소 추가! ✨
 st.markdown(
     """
     <style>
-    /* 전체 페이지 배경색 */
+    /* 전체 페이지 배경색 및 폰트 */
     .stApp {
-        background-color: #f0f2f6; /* 밝은 회색 계열 */
-        font-family: 'AppleSDGothicNeo', 'Malgun Gothic', sans-serif; /* 예쁜 한글 폰트 적용 (시스템 폰트) */
+        background-color: #F8F8F8; /* 아주 연한 백색, 전통 배경 느낌 */
+        font-family: 'Noto Serif KR', serif; /* Noto Serif KR 폰트 적용 */
+        background-image: url('https://raw.githubusercontent.com/minha_user/your_repo/main/art_images/korean_pattern_subtle.png'); /* 🌟 전통 문양 배경 이미지 URL (여기에 네 이미지 URL 넣기!) 🌟 */
+        background-repeat: repeat; /* 패턴 반복 */
+        background-size: 150px; /* 패턴 크기 조절 */
+        opacity: 1.0; /* 투명도 조절, 패턴이 너무 강하면 낮춰줘 */
+    }
+    
+    /* Subtle Fade-in Animation for the whole app */
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .stApp {
+        animation: fadeIn 1s ease-in-out;
     }
 
     /* 메인 콘텐츠 영역 안쪽 여백 */
     .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        padding-left: 5rem;
-        padding-right: 5rem;
+        padding-top: 3rem; /* 여백 더 넓게 */
+        padding-bottom: 3rem;
+        padding-left: 6rem;
+        padding-right: 6rem;
+        background-color: rgba(255, 255, 255, 0.85); /* 콘텐츠 영역은 살짝 반투명하게 */
+        border-radius: 15px; /* 둥근 모서리 */
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.1); /* 그림자 효과 */
     }
 
     /* 사이드바 배경색 */
     .css-1d391kg { /* Streamlit의 사이드바 CSS 클래스 */
-        background-color: #e0e0e0;
+        background-color: #E6FFE6; /* 연한 비취색 계열 */
+        border-right: 2px solid #88B04B; /* 비취색 선 */
     }
 
     /* 제목 스타일 */
     h1 {
-        color: #4B0082; /* 인디고 */
+        color: #B22222; /* 벽돌색, 다홍색 계열로 강조 */
         text-align: center;
-        font-size: 3em; /* 글자 크기 키우기 */
+        font-size: 3.5em; /* 글자 크기 더 키우기 */
         margin-bottom: 0.5em; /* 여백 추가 */
+        letter-spacing: -2px; /* 글자 간격 살짝 줄이기 */
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* 제목 그림자 */
     }
     h2 {
-        color: #8A2BE2; /* 블루 바이올렛 */
-        font-size: 2em;
+        color: #3CB371; /* 미디엄 씨 그린 (비취색 계열) */
+        font-size: 2.2em;
+        margin-top: 1.5em;
+        margin-bottom: 0.8em;
+        border-bottom: 2px solid #88B04B; /* 비취색 하단 선 */
+        padding-bottom: 0.5em;
     }
     h3 {
-        color: #A020F0; /* 퍼플 */
-        font-size: 1.5em;
+        color: #A020F0; /* 보라색 계열 (전통 조화) */
+        font-size: 1.8em;
     }
 
     /* 일반 텍스트 스타일 */
     .stMarkdown p {
         font-size: 1.1em; /* 글자 크기 조금 키우기 */
-        line-height: 1.6; /* 줄 간격 넓히기 */
-        color: #333;
+        line-height: 1.8; /* 줄 간격 넓히기 */
+        color: #333; /* 먹색 계열 */
     }
 
-    /* 버튼 스타일 */
+    /* 버튼 스타일 (더 유니크하게!) */
     .stButton>button {
-        background-color: #8A2BE2; /* 버튼 배경색 */
+        background-color: #FF6347; /* 다홍색 계열 */
         color: white; /* 글자색 */
-        border-radius: 12px; /* 둥근 모서리 */
-        border: none; /* 테두리 없애기 */
-        padding: 10px 20px; /* 버튼 안쪽 여백 */
-        font-size: 1.1em; /* 글자 크기 */
-        transition: 0.3s; /* 부드러운 전환 효과 */
+        border-radius: 10px; /* 둥근 모서리 */
+        border: 2px solid #CD5C5C; /* 테두리 추가 */
+        padding: 12px 25px; /* 버튼 안쪽 여백 늘리기 */
+        font-size: 1.2em; /* 글자 크기 키우기 */
+        font-weight: bold; /* 글씨 굵게 */
+        transition: all 0.3s ease; /* 부드러운 전환 효과 */
+        box-shadow: 3px 3px 8px rgba(0,0,0,0.2); /* 그림자 */
+        position: relative; /* 애니메이션을 위해 */
+        overflow: hidden; /* 오버플로우 숨기기 */
     }
     .stButton>button:hover {
-        background-color: #6A0DAD; /* 호버 시 색상 변경 */
-        transform: translateY(-2px); /* 살짝 위로 뜨는 효과 */
+        background-color: #FF4500; /* 호버 시 색상 변경 */
+        transform: translateY(-3px) scale(1.02); /* 살짝 위로 뜨고 커지는 효과 */
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.3); /* 그림자 더 강하게 */
+        border-color: #B22222; /* 테두리색 변경 */
     }
-
+    /* 버튼 클릭 시 미세 애니메이션 (Optional) */
+    .stButton>button:active {
+        transform: translateY(0) scale(0.98); /* 클릭 시 살짝 눌리는 느낌 */
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    
     /* 알림창 (info, success, warning) 스타일 */
     .stAlert {
-        border-radius: 8px; /* 둥근 모서리 */
+        border-radius: 10px; /* 둥근 모서리 */
         font-size: 1.1em;
+        border-left: 8px solid; /* 왼쪽 선 색상 고정 (아래에서 바꿈) */
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     }
     .st-bu { /* st.info 박스 */
-        background-color: #e6f7ff;
-        border-left: 8px solid #36a2eb;
+        background-color: #EBF7EB; /* 연한 초록 계열 배경 */
+        border-color: #66CDAA; /* 비취색 선 */
+        color: #2E8B57; /* 짙은 초록 글자 */
     }
     .st-cq { /* st.success 박스 */
-        background-color: #e9ffea;
-        border-left: 8px solid #28a745;
+        background-color: #EEFFEE;
+        border-color: #28a745;
+        color: #28a745;
     }
     .st-bV { /* st.warning 박스 */
-        background-color: #fff9e6;
-        border-left: 8px solid #ffc107;
+        background-color: #FFF2E6;
+        border-color: #FF7F50; /* 다홍빛 주황 선 */
+        color: #CD5C5C;
     }
 
+    /* 명화 결과 카드 등장 애니메이션 */
+    @keyframes slideInFromRight {
+      0% { transform: translateX(100%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    .art-result-card { /* 각 명화 결과 div에 적용할 클래스 */
+        animation: slideInFromRight 0.8s ease-out forwards;
+        opacity: 0; /* 초기 투명도를 0으로 설정 */
+        margin-bottom: 2em; /* 카드 사이 간격 */
+        padding: 1.5em;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
     </style>
     """,
     unsafe_allow_html=True # HTML/CSS 코드 적용 허용
 )
 
-# --- 1. 정적 설정 (이미지 폴더 경로 - 현재 사용 안함. 혹시 나중에 쓸까봐 냅둠) ---
-# ART_IMAGES_DIR = "art_images"
-# 만약 art_images 폴더가 없으면 만들어줘 (로컬 개발용. 이제 필요 없지만 혹시 몰라서)
-# if not os.path.exists(ART_IMAGES_DIR):
-#     os.makedirs(ART_IMAGES_DIR)
+# --- 1. 정적 설정 ---
+# ART_IMAGES_DIR 관련 코드는 제거!
 
-# --- 2. 데이터 매핑: 애니/만화 테마와 명화 (image_path 정보는 제거!) ---
+# --- 2. 데이터 매핑: 애니/만화 테마와 명화 (image_path 정보는 없음) ---
 anime_art_mapping = {
     "복수극/다크 히어로": [
         {
@@ -233,24 +290,21 @@ with st.sidebar:
     사용자의 작품 이미지는 업로드할 수 있습니다!
     """)
     st.markdown("---")
-    # 'Developed with ❤️ for 민하음 by 공주 👑' 문구는 아예 삭제!
+
 
 # --- 4. 메인 앱 인터페이스 ---
-st.markdown("<h1 style='color:#4B0082; text-align: center;'>🎨 애니메이션/만화 X 서양 명화: 스토리 연결고리 탐색 📚</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>🎨 애니메이션/만화 X 서양 명화: 스토리 연결고리 탐색 📚</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; font-size: 1.2em; color: #555;'>좋아하는 애니메이션/만화의 장르나 테마를 선택해주세요!<br>당신의 취향과 놀랍도록 닮은 서양 미술 작품과 그 스토리를 찾아드릴게요. 💫</p>", unsafe_allow_html=True)
 
 st.write("---")
 
-# 사용자 이미지 업로드 섹션 (다시 활성화!)
+# 사용자 이미지 업로드 섹션
 col_upload, col_select = st.columns([1, 2]) # 1:2 비율로 컬럼 나누기
 
 with col_upload:
     st.subheader("✨ 작품 한 장면 업로드! ✨")
     uploaded_file = st.file_uploader("🖼️ 좋아하는 애니/만화 한 장면을 올려주세요 (선택 사항)", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
-        # 이미지를 PIL.Image로 열어서 보여줄 수도 있음 (추가 옵션)
-        # image = Image.open(uploaded_file)
-        # st.image(image, caption="업로드한 당신의 작품 🎨", use_column_width=True)
         st.image(uploaded_file, caption="업로드한 당신의 작품 🎨", use_column_width=True)
         st.success("✨ 멋진 작품이 업로드됐어요! 이제 오른쪽에서 장르를 선택해 주세요! ✨")
 
@@ -273,26 +327,27 @@ with col_select:
             if selected_genre in anime_art_mapping:
                 art_recommendations = anime_art_mapping[selected_genre]
 
-                # 매칭된 명화들을 하나씩 표시
+                # 매칭된 명화들을 하나씩 표시 (CSS 애니메이션 클래스 추가!)
                 for i, art_info in enumerate(art_recommendations):
-                    st.markdown("---") # 구분선 추가
-                    st.write("") # 간격 띄우기
-
-                    # 명화 이미지 표시 부분은 아예 제거했음!
-                    st.markdown(f"<h3 style='color:#A020F0;'>🖼️ {art_info['title']}</h3>", unsafe_allow_html=True)
-                    st.write(f"**🎨 작가:** {art_info['artist']}")
-                    st.markdown(f"<p style='font-weight: bold; color: #6A5ACD;'>📖 작품 속 이야기:</p>", unsafe_allow_html=True)
-                    st.write(art_info["story"])
-                    st.markdown(f"<p style='font-weight: bold; color: #BA55D3;'>🔗 애니/만화와의 연결고리:</p>", unsafe_allow_html=True)
-                    st.success(art_info["connection"]) # 성공적인 연결 강조
-                    st.write("") # 간격 띄우기
+                    # 각 카드마다 고유한 애니메이션 딜레이를 주면 순차적으로 등장하는 느낌을 줄 수 있음
+                    st.markdown(f"""
+                    <div class="art-result-card" style="animation-delay: {i * 0.1}s;">
+                        <h3 style='color:#A020F0;'>🖼️ {art_info['title']}</h3>
+                        <p><strong>🎨 작가:</strong> {art_info['artist']}</p>
+                        <p style='font-weight: bold; color: #6A5ACD;'>📖 작품 속 이야기:</p>
+                        <p>{art_info["story"]}</p>
+                        <p style='font-weight: bold; color: #BA55D3;'>🔗 애니/만화와의 연결고리:</p>
+                        <div class="stAlert st-cq" style="margin-left: 0; margin-right: 0;">
+                            <p>{art_info["connection"]}</p>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
             else:
                 st.error("😭 아쉽지만, 해당 장르에 대한 명화 정보는 아직 없네요. 다른 장르를 선택해주세요!")
 
 st.write("---")
 st.markdown("<p style='text-align: center; font-size: 0.9em; color: #777;'>✨ 이 앱은 미술과 애니메이션/만화의 경계를 넘어선 스토리텔링의 유사성을 탐구합니다. ✨</p>", unsafe_allow_html=True)
-# 이전 '공주' 문구는 여기에서 아예 삭제!
 
 # 푸터/개발자 노트 (깔끔하게 익스팬더로 숨겨두기)
 with st.expander("📚 개발자 노트 / 생기부 활용 팁"):
